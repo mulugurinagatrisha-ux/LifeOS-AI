@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}Add Event | LifeOS AI{% endblock %}
+
+{% block content %}
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",Arial,sans-serif;
+}
+
+body{
+    background:#eef3ff;
+    padding:30px;
+}
+
+.container{
+
+    width:100%;
+    max-width:760px;
+
+    margin:40px auto;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:35px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+    animation:fade .5s ease;
+
+}
+
+@keyframes fade{
+
+from{
+    opacity:0;
+    transform:translateY(20px);
+}
+
+to{
+    opacity:1;
+    transform:translateY(0);
+}
+
+}
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.header h1{
+
+    color:#2563eb;
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.header p{
+
+    color:#64748b;
+
+    font-size:15px;
+
+}
+
+.form-group{
+
+    margin-bottom:22px;
+
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#1e293b;
+
+}
+
+input,
+textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:2px solid #dbeafe;
+
+    border-radius:12px;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+    min-height:150px;
+
+}
+
+input:focus,
+textarea:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 15px rgba(37,99,235,.20);
+
+}
+
+.button-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+.btn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:190px;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+    box-sizing:border-box;
+
+}
+
+input.btn{
+    appearance:none;
+    -webkit-appearance:none;
+}
+
+.save{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.save:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 20px rgba(37,99,235,.25);
+
+}
+
+.back{
+
+    background:#e5e7eb;
+
+    color:#111827;
+
+}
+
+.back:hover{
+
+    background:#cbd5e1;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+
+}
+
+.btn:active{
+
+    transform:scale(.96);
+
+}
+
+@media(max-width:768px){
+
+.container{
+
+    padding:25px;
+
+}
+
+.button-group{
+
+    flex-direction:column;
+
+}
+
+.btn{
+
+    width:100%;
+
+}
+
+}
+
+</style>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>📅 Add Event</h1>
+
+        <p>Create a new event and never miss an important moment.</p>
+
+    </div>
+
+    <form method="POST">
+
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+
+            {{ form.title.label }}
+
+            {{ form.title() }}
+
+        </div>
+
+        <div class="form-group">
+
+            {{ form.description.label }}
+
+            {{ form.description(rows=6) }}
+
+        </div>
+
+        <div class="form-group">
+
+            {{ form.event_date.label }}
+
+            {{ form.event_date() }}
+
+        </div>
+
+        <div class="form-group">
+
+            {{ form.event_time.label }}
+
+            {{ form.event_time() }}
+
+        </div>
+
+        <div class="button-group">
+
+            {{ form.submit(class="btn save", value="💾 Save Event") }}
+
+            <a href="{{ url_for('calendar.month_calendar') }}" class="btn back">
+                ⬅ Back
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

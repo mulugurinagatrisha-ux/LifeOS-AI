@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}Register | LifeOS AI{% endblock %}
+
+{% block content %}
+
+<style>
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#f3e8ff,#e9d5ff,#ddd6fe,#f5d0fe);
+    background-size:400% 400%;
+    animation:bgMove 12s ease infinite;
+}
+@keyframes bgMove{
+
+0%{
+    background-position:0% 50%;
+}
+
+50%{
+    background-position:100% 50%;
+}
+
+100%{
+    background-position:0% 50%;
+}
+
+}
+.register-container{
+    max-width:550px;
+    margin:60px auto;
+}
+
+.register-card{
+    
+    position:relative;
+
+    overflow:hidden;
+
+    background:rgba(255,255,255,.95);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    border:1px solid rgba(255,255,255,.45);
+
+    border-radius:26px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.15);
+
+    transition:.45s ease;
+
+    animation:
+        fade .8s ease,
+        floating 5s ease-in-out infinite;
+
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    z-index:-1;
+}
+
+body::before{
+    width:320px;
+    height:320px;
+    background:#c084fc;
+    top:-120px;
+    left:-120px;
+}
+
+body::after{
+    width:380px;
+    height:380px;
+    background:#ec4899;
+    bottom:-150px;
+    right:-150px;
+}
+.register-header{
+    text-align:center;
+    padding:35px 30px 20px;
+}
+
+.register-header h1{
+    color:#7c3aed;
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.register-header p{
+    color:#64748b;
+    font-size:15px;
+}
+
+.register-body{
+    padding:35px;
+}
+
+.form-group{
+    margin-bottom:22px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#1e293b;
+}
+.register-btn{
+    background:#7c3aed;
+    color:#fff;
+}
+
+
+.form-control{
+    width:100%;
+    padding:14px;
+    border:2px solid #dbeafe;
+    border-radius:12px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+    box-sizing:border-box;
+}
+
+.form-control:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 12px rgba(37,99,235,.18);
+}
+
+.show-password{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:25px;
+    color:#475569;
+    font-size:14px;
+}
+
+.button-group{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:10px;
+}
+
+.btn{
+    min-width:180px;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:none;
+    border-radius:12px;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.register-btn{
+    background:#2563eb;
+    color:#fff;
+}
+
+.register-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-3px);
+    box-shadow:0 10px 20px rgba(37,99,235,.25);
+}
+
+.login-btn{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+.login-btn:hover{
+    background:#cbd5e1;
+    transform:translateY(-3px);
+}
+
+.btn:active{
+    transform:scale(.96);
+}
+
+@media(max-width:600px){
+
+.register-container{
+    margin:20px;
+}
+
+.register-body{
+    padding:25px;
+}
+
+.button-group{
+    flex-direction:column;
+}
+
+.btn{
+    width:100%;
+}
+
+}
+.register-card:hover{
+
+    transform:translateY(-10px) scale(1.01);
+
+    box-shadow:
+        0 35px 80px rgba(124,58,237,.30);
+
+}
+.register-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-140%;
+
+    width:70%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.55),
+        transparent
+    );
+
+    transform:skewX(-25deg);
+
+    transition:1s;
+
+}
+
+.register-card:hover::before{
+
+    left:150%;
+
+}
+@keyframes floating{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+.form-control{
+
+    transition:.35s;
+
+}
+
+.form-control:focus{
+
+    transform:scale(1.02);
+
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,.15);
+
+}
+</style>
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <div class="register-header">
+
+            <h1>📝 Create Account</h1>
+
+            <p>Join <b>LifeOS AI</b> and start managing your life smarter.</p>
+
+        </div>
+
+        <div class="register-body">
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.full_name.label }}
+                    {{ form.full_name(class="form-control", placeholder="Enter your full name") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control", placeholder="Enter your email") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control", id="password", placeholder="Create password") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(class="form-control", id="confirm_password", placeholder="Confirm password") }}
+                </div>
+
+                <div class="show-password">
+
+                    <input type="checkbox" id="showPassword">
+
+                    <label for="showPassword">
+                        Show Passwords
+                    </label>
+
+                </div>
+
+                <div class="button-group">
+
+                    {{ form.submit(class="btn register-btn", value="🚀 Create Account") }}
+
+                    <a href="{{ url_for('auth.login') }}" class="btn login-btn">
+
+                        🔐 Login
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("showPassword").addEventListener("change",function(){
+
+    const type=this.checked?"text":"password";
+
+    document.getElementById("password").type=type;
+    document.getElementById("confirm_password").type=type;
+
+});
+
+</script>
+
+{% endblock %}

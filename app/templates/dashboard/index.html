@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeOS AI Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h2>LifeOS AI</h2>
+        <p>Your Smart Assistant</p>
+    </div>
+
+    <a href="{{ url_for('dashboard.home') }}">
+        🏠 <span class="text">Dashboard</span>
+    </a>
+    <li class="{% if request.endpoint and request.endpoint.startswith('ai_goals') %}active{% endif %}">
+    <a href="{{ url_for('ai_goals.index') }}">
+        <i class="fas fa-robot"></i>
+        <span>AI Goal Coach</span>
+    </a>
+</li>
+    <a href="{{ url_for('weather.home') }}">
+    🌦️ <span class="text">Weather</span>
+</a>
+    <a href="{{ url_for('notes.all_notes') }}">
+        📝 <span class="text">Notes</span>
+    </a>
+
+    <a href="{{ url_for('tasks.all_tasks') }}">
+        ✅ <span class="text">Tasks</span>
+    </a>
+
+    <a href="{{ url_for('goals.all_goals') }}">
+        🎯 <span class="text">Goals</span>
+    </a>
+
+    <a href="{{ url_for('expense.all_expenses') }}">
+        💰 <span class="text">Expenses</span>
+    </a>
+
+    <a href="{{ url_for('calendar.month_calendar') }}">
+        📅 <span class="text">Calendar</span>
+    </a>
+
+    <a href="{{ url_for('ai.chat') }}">
+        🤖 <span class="text">AI Assistant</span>
+    </a>
+
+    <a href="{{ url_for('profile.view_profile') }}">
+        👤 <span class="text">Profile</span>
+    </a>
+
+    <a href="{{ url_for('auth.logout') }}">
+        🚪 <span class="text">Logout</span>
+    </a>
+
+</div>
+
+<div class="main">
+
+    <!-- ================= TOPBAR ================= -->
+
+    <div class="topbar">
+
+        <div class="greeting">
+
+            <h2 id="greet"></h2>
+
+            <p>{{ current_user.full_name }}</p>
+
+            <h3>
+                Welcome to LifeOS AI Smart Assistant 🚀
+            </h3>
+
+            <p>
+                Helping you organize your life smarter every day.
+            </p>
+
+        </div>
+
+        <div class="right-top">
+
+           <div id="weather-loading"></div>
+
+<div id="weather-box">
+    <img id="icon">
+    <div>
+    <h3 id="city"></h3>
+    <h2 id="temp"></h2>
+    <p id="desc"></p>
+    <span id="humidity"></span>
+    <span id="wind"></span>
+</div>
+</div>
+            <div class="time-box">
+
+                <h3 id="time"></h3>
+
+                <span id="date"></span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= PROFILE CARD ================= -->
+
+    <div class="profile-card">
+
+        <div class="profile-left">
+
+            <img
+            src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_image) }}"
+            class="profile-image">
+
+            <div>
+
+                <h2>{{ current_user.full_name }}</h2>
+
+                <p>{{ current_user.email }}</p>
+
+            </div>
+
+        </div>
+
+        <div class="button-group">
+
+            <a href="{{ url_for('profile.view_profile') }}"
+               class="btn btn-white">
+
+                👤 My Profile
+
+            </a>
+
+            <a href="{{ url_for('profile.edit_profile') }}"
+               class="btn btn-yellow">
+
+                ✏ Edit Profile
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ================= AI TIP ================= -->
+
+    <div class="ai-tip">
+
+        <div class="tip-icon">
+            💡
+        </div>
+
+        <div>
+
+            <h3>AI Tip of the Day</h3>
+
+            <p id="dailyTip"></p>
+
+        </div>
+
+    </div>
+        <!-- ================= DASHBOARD ================= -->
+
+    <div class="dashboard-grid">
+
+        <!-- AI Suggestions -->
+
+        <div class="dashboard-box">
+
+            <h3>🤖 AI Suggestions</h3>
+
+            <ul class="suggestion-list">
+
+                {% for suggestion in suggestions %}
+
+                <li>{{ suggestion }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <!-- Expense Summary -->
+
+        <div class="dashboard-box">
+
+            <h3>💰 Expense Summary</h3>
+
+            <div class="expense-box">
+
+                <h1>₹ {{ total_expense }}</h1>
+
+                <p>Total Expenses</p>
+
+                <a
+                    href="{{ url_for('expense.all_expenses') }}"
+                    class="expense-btn">
+
+                    View Expenses →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PROGRESS ================= -->
+
+    <div class="dashboard-grid">
+
+        <!-- Task Progress -->
+
+        <div class="dashboard-box">
+
+            <h3>📊 Task Progress</h3>
+
+            <div class="goal-card">
+
+                <div class="goal-title">
+
+                    Overall Task Progress
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width:{{ progress }}%;">
+
+                    </div>
+
+                </div>
+
+                <strong>{{ progress }}%</strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Goal Progress -->
+
+        <div class="dashboard-box">
+
+            <h3>🎯 Goal Progress</h3>
+
+            <div class="goal-card">
+
+                <div class="goal-title">
+
+                    Overall Goal Progress
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width:{{ goal_progress }}%;">
+
+                    </div>
+
+                </div>
+
+                <strong>{{ goal_progress }}%</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+
+// ================= CLOCK =================
+
+function updateClock() {
+
+    let now = new Date();
+
+    let h = now.getHours();
+
+    let greet = "Good Evening 👋";
+
+    if (h < 12) {
+        greet = "Good Morning ☀️";
+    }
+    else if (h < 17) {
+        greet = "Good Afternoon 🌤";
+    }
+
+    document.getElementById("greet").innerHTML = greet;
+
+    document.getElementById("time").innerHTML =
+        now.toLocaleTimeString();
+
+    document.getElementById("date").innerHTML =
+        now.toDateString();
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+
+// ================= AI TIP =================
+
+const tips = [
+
+    "Complete your most important task first.",
+
+    "Review your goals for 5 minutes today.",
+
+    "Write one new idea in Notes.",
+
+    "Drink enough water while working.",
+
+    "Finish pending tasks before creating new ones.",
+
+    "Take a short break every hour.",
+
+    "Keep your dashboard organized."
+
+];
+
+document.getElementById("dailyTip").innerHTML =
+tips[new Date().getDay()];
+
+</script>
+<script src="{{ url_for('static', filename='js/weather.js') }}"></script>
+</div>
+
+</body>
+
+</html>

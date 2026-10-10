@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}AI Goal Coach | LifeOS AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/ai_goal.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="goal-container">
+
+    <!-- ================= STATS ================= -->
+
+    <div class="goal-stats">
+
+        <div class="stat-card">
+            <div class="icon">🎯</div>
+            <h2>{{ total_goals or 0 }}</h2>
+            <p>Total Goals</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">🤖</div>
+            <h2>{{ ai_plans or 0 }}</h2>
+            <p>AI Plans</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">✅</div>
+            <h2>{{ completed_goals or 0 }}</h2>
+            <p>Completed</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">📈</div>
+            <h2>{{ progress or 0 }}%</h2>
+            <p>Progress</p>
+        </div>
+
+    </div>
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
+
+    <a href="{{ url_for('dashboard.home') }}" class="back-btn">
+        ← Dashboard
+    </a>
+
+    <h2>🎯 AI Goal Coach</h2>
+
+</div>
+    <div class="goal-header">
+
+        <div>
+
+            <h1>🤖 AI Goal Coach</h1>
+
+            <p>
+                Let AI create your personalized roadmap to success.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- ================= GRID ================= -->
+
+    <div class="goal-grid">
+
+        <!-- LEFT -->
+
+        <div class="goal-form-card">
+
+            <h2>🎯 Create New Goal</h2>
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+
+                    {{ form.goal.label }}
+
+                    {{ form.goal(
+                        class="form-control",
+                        placeholder="Example: Become Python Developer"
+                    ) }}
+
+                </div>
+
+                <div class="form-group">
+
+                    {{ form.category.label }}
+
+                    {{ form.category(
+                        class="form-control"
+                    ) }}
+
+                </div>
+
+                <div class="two-column">
+
+                    <div class="form-group">
+
+                        {{ form.current_value.label }}
+
+                        {{ form.current_value(
+                            class="form-control",
+                            placeholder="Example: Python Basics"
+                        ) }}
+
+                    </div>
+
+                    <div class="form-group">
+
+                        {{ form.target_value.label }}
+
+                        {{ form.target_value(
+                            class="form-control",
+                            placeholder="Example: Full Stack Developer"
+                        ) }}
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    {{ form.notes.label }}
+
+                    {{ form.notes(
+                        class="form-control",
+                        rows="5",
+                        placeholder="Write additional details..."
+                    ) }}
+
+                </div>
+
+                <div class="generate-btn">
+
+                    {{ form.submit(
+                        class="btn-ai"
+                    ) }}
+
+                </div>
+
+            </form>
+
+        </div>
+        <!-- ================= RIGHT ================= -->
+
+<div class="goal-preview">
+
+    <div class="preview-card">
+
+        <h2>✨ AI Goal Preview</h2>
+
+        <br>
+
+        {% set latest_goal = goals[0] if goals else None %}
+
+        <h3>📅 Estimated Time</h3>
+
+        <h1 id="days">
+
+            {% if parsed and parsed.get("Estimated Days") %}
+
+                {{ parsed.get("Estimated Days") }}
+
+            {% elif latest_goal and latest_goal.estimated_days %}
+
+                {{ latest_goal.estimated_days }} Days
+
+            {% else %}
+
+                -- Days
+
+            {% endif %}
+
+        </h1>
+
+        <hr>
+
+        <br>
+
+        <h3>📊 Today's Progress</h3>
+
+        <div class="progress-circle">
+
+            <span>
+
+                {% if latest_goal %}
+
+                    {{ latest_goal.progress|default(0)|int }}%
+
+                {% else %}
+
+                    0%
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+        <br>
+
+        <h3>📌 Status</h3>
+
+        <h2 class="status">
+
+            {% if latest_goal %}
+
+                {% if latest_goal.completed %}
+
+                    🎉 Goal Completed
+
+                {% elif progress > 0 %}
+
+                    🚀 In Progress
+
+                {% else %}
+
+                    📝 Tasks Not Started
+
+                {% endif %}
+
+            {% else %}
+
+                Ready To Generate
+
+            {% endif %}
+
+        </h2>
+
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/ai_goal.js') }}"></script>
+
+{% endblock %}

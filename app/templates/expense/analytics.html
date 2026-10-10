@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Expense Analytics{% endblock %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+
+background:#eef3ff;
+
+}
+
+.analytics{
+
+max-width:1100px;
+
+margin:40px auto;
+
+}
+
+.card{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.1);
+
+margin-bottom:25px;
+
+}
+
+.total{
+
+background:linear-gradient(135deg,#2563eb,#4f46e5);
+
+color:white;
+
+text-align:center;
+
+}
+
+.total h1{
+
+font-size:45px;
+
+margin-top:15px;
+
+}
+
+canvas{
+
+max-height:450px;
+
+}
+
+.btn{
+
+display:inline-block;
+
+margin-top:25px;
+
+background:#2563eb;
+
+padding:12px 22px;
+
+border-radius:10px;
+
+color:white;
+
+text-decoration:none;
+
+}
+
+</style>
+
+<div class="analytics">
+
+<div class="card total">
+
+<h2>Total Expenses</h2>
+
+<h1>₹ {{ "%.2f"|format(total) }}</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Expense Category Chart</h2>
+
+<canvas id="expenseChart"></canvas>
+
+</div>
+
+<a
+href="{{ url_for('expense.all_expenses') }}"
+class="btn">
+
+⬅ Back
+
+</a>
+
+</div>
+
+<script>
+
+const ctx=document.getElementById("expenseChart");
+
+new Chart(ctx,{
+
+type:"pie",
+
+data:{
+
+labels:{{ labels|tojson }},
+
+datasets:[{
+
+data:{{ values|tojson }}
+
+}]
+
+}
+
+});
+
+</script>
+
+{% endblock %}

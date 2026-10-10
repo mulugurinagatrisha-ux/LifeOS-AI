@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Weather Center</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/weather.css') }}">
+</head>
+
+<body>
+<div class="container">
+
+    <!--==================== HEADER ====================-->
+
+    <div class="top-bar">
+
+        <div>
+
+            <h1 class="weather-title">
+                🌦 Weather Center
+            </h1>
+
+            <p class="weather-subtitle">
+                Live Weather • Smart Forecast • AI Insights
+            </p>
+
+        </div>
+        <a href="{{ url_for('dashboard.home') }}" class="back-btn">
+            ← Dashboard
+        </a>
+
+        <button class="refresh-btn"
+                onclick="location.reload()">
+
+            🔄 Refresh
+
+        </button>
+
+
+    </div>
+
+
+    <!--==================== HERO CARD ====================-->
+
+    <div class="weather-card">
+
+        <div class="weather-header">
+
+            <!-- Left -->
+
+            <div>
+
+                <h2 class="city">
+
+                    📍 <span id="city">
+                        Loading...
+                    </span>
+
+                </h2>
+
+                <p class="country"
+                   id="desc">
+
+                    Detecting Weather...
+
+                </p>
+
+                <h1 class="temp"
+                    id="temp">
+
+                    --°C
+
+                </h1>
+
+            </div>
+
+
+            <!-- Center -->
+
+            <div style="text-align:center;">
+
+                <img id="icon"
+                     class="weather-icon"
+                     src="">
+
+            </div>
+
+
+            <!-- Right -->
+
+            <div style="text-align:right;">
+
+                <h2 style="font-size:22px;">
+                    Today
+                </h2>
+
+                <h3 id="todayDate"></h3>
+
+                <br>
+
+                <div style="font-size:18px;">
+                    ⏰
+                    <span id="clock"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--==================== WEATHER DETAILS ====================-->
+
+    <div class="details">
+
+        <div class="box">
+
+            <h3>💧 Humidity</h3>
+
+            <h2 id="humidity">
+
+                --%
+
+            </h2>
+
+        </div>
+
+        <div class="box">
+
+            <h3>🌬 Wind</h3>
+
+            <h2 id="wind">
+
+                -- m/s
+
+            </h2>
+
+        </div>
+
+        <div class="box">
+
+            <h3>🌡 Feels Like</h3>
+
+            <h2 id="feels">
+
+                --°C
+
+            </h2>
+
+        </div>
+
+        <div class="box">
+
+            <h3>📊 Pressure</h3>
+
+            <h2 id="pressure">
+
+                ----
+
+            </h2>
+
+        </div>
+
+    </div>
+<!-- ==================== 24 HOUR FORECAST ==================== -->
+
+<h2 class="forecast-title">
+
+    🕒 24-Hour Forecast
+
+</h2>
+
+<div class="hourly-container">
+
+    <div id="hourlyForecast" class="hourly-scroll">
+
+        <!-- JS will load hourly cards here -->
+
+    </div>
+
+</div>
+<!-- ================= TODAY'S HIGHLIGHTS ================= -->
+
+<h2 class="forecast-title">
+    ✨ Today's Highlights
+</h2>
+
+<div class="highlights">
+
+    <div class="highlight-card">
+        <h4>🌅 Sunrise</h4>
+        <h2 id="sunrise">--:--</h2>
+    </div>
+
+    <div class="highlight-card">
+        <h4>🌇 Sunset</h4>
+        <h2 id="sunset">--:--</h2>
+    </div>
+
+    <div class="highlight-card">
+        <h4>👁 Visibility</h4>
+        <h2 id="visibility">-- km</h2>
+    </div>
+
+    <div class="highlight-card">
+        <h4>🌡 Min / Max</h4>
+        <h2 id="minmax">-- / --</h2>
+    </div>
+
+</div>
+    <!--==================== FORECAST ====================-->
+
+    <h2 class="forecast-title">
+
+        📅 5 Day Forecast
+
+    </h2>
+
+    <div id="forecast"
+         class="forecast">
+
+    </div>
+
+
+    <!--==================== AI CARD ====================-->
+
+    <div class="ai-card">
+
+        <h2>
+
+            🤖 AI Weather Assistant
+
+        </h2>
+
+        <p id="aiSuggestion">
+
+            Loading AI Advice...
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+    navigator.geolocation.getCurrentPosition(async(position)=>{
+
+    console.log("JS Working");
+
+    const response = await fetch("/weather/api",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            lat:position.coords.latitude,
+            lon:position.coords.longitude
+        })
+    });
+// ================= LIVE CLOCK =================
+
+function updateTime() {
+
+    const now = new Date();
+
+    document.getElementById("clock").innerHTML =
+        now.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+    document.getElementById("todayDate").innerHTML =
+        now.toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+}
+
+// Call once immediately
+updateTime();
+
+// Update every second
+setInterval(updateTime, 1000);
+    const data = await response.json();
+
+    if(data.success){
+
+        document.querySelector(".temp").innerHTML =
+            data.weather.temp+"°C";
+
+        document.getElementById("city").innerHTML =
+        data.weather.city + ", " + data.weather.country;
+        
+        document.getElementById("desc").innerHTML =
+        data.weather.description;
+
+        document.querySelector("img").src =
+            "https://openweathermap.org/img/wn/"+data.weather.icon+"@2x.png";
+
+        const box = document.querySelectorAll(".box");
+
+        box[0].innerHTML =
+            "💧 Humidity<br><br>"+data.weather.humidity+"%";
+
+        box[1].innerHTML =
+            "🌬 Wind<br><br>"+data.weather.wind+" m/s";
+
+        box[2].innerHTML =
+            "🌡 Feels Like<br><br>"+data.weather.feels_like+"°C";
+
+        box[3].innerHTML =
+            "📊 Pressure<br><br>"+data.weather.pressure+" hPa";
+    }
+    function formatTime(unix) {
+
+    const date = new Date(unix * 1000);
+
+    return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+}
+
+document.getElementById("sunrise").innerHTML =
+    formatTime(data.weather.sunrise);
+
+document.getElementById("sunset").innerHTML =
+    formatTime(data.weather.sunset);
+
+document.getElementById("visibility").innerHTML =
+    data.weather.visibility + " km";
+
+document.getElementById("minmax").innerHTML =
+    data.weather.temp_min + "° / " +
+    data.weather.temp_max + "°";
+
+    // ---------- Forecast ----------
+
+    const response2 = await fetch("/weather/forecast",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            lat:position.coords.latitude,
+            lon:position.coords.longitude
+        })
+    });
+
+    const result = await response2.json();
+
+    const forecastDiv = document.getElementById("forecast");
+
+    forecastDiv.innerHTML = "";
+
+    result.forecast.forEach(day=>{
+
+        forecastDiv.innerHTML += `
+            <div class="box">
+                <h3>${day.date}</h3>
+                <img src="https://openweathermap.org/img/wn/${day.icon}@2x.png">
+                <h2>${day.temp}°C</h2>
+                <p>${day.desc}</p>
+            </div>
+        `;
+
+    });
+
+function updateTime(){
+
+const now=new Date();
+
+document.getElementById("clock").innerHTML=
+now.toLocaleTimeString();
+
+document.getElementById("todayDate").innerHTML=
+now.toDateString();
+}
+// ================= AI WEATHER =================
+
+let tips = [];
+
+if (data.weather.temp >= 38) {
+    tips.push("🥵 Very hot today. Stay hydrated and avoid direct sunlight.");
+}
+else if (data.weather.temp >= 32) {
+    tips.push("🥤 Drink plenty of water.");
+}
+else if (data.weather.temp <= 18) {
+    tips.push("🧥 Wear a light jacket.");
+}
+
+const desc = data.weather.description.toLowerCase();
+
+if (desc.includes("rain")) {
+    tips.push("☂ Carry an umbrella.");
+}
+
+if (desc.includes("cloud")) {
+    tips.push("☁ Nice cloudy weather for a walk.");
+}
+
+if (desc.includes("clear")) {
+    tips.push("😎 Clear sky. Enjoy your day.");
+}
+
+if (desc.includes("thunder")) {
+    tips.push("⚡ Thunderstorm expected.");
+}
+
+if (desc.includes("mist") || desc.includes("fog")) {
+    tips.push("🌫 Drive carefully.");
+}
+
+if (data.weather.humidity >= 75) {
+    tips.push("💧 High humidity today.");
+}
+
+if (data.weather.wind >= 8) {
+    tips.push("🌬 Strong winds expected.");
+}
+
+if (data.weather.pressure < 1005) {
+    tips.push("🌦 Weather may change later.");
+}
+
+if (tips.length === 0) {
+    tips.push("😊 Pleasant weather today.");
+}
+
+document.getElementById("aiSuggestion").innerHTML =
+    tips.join("<br><br>");
+// ================= 24 HOUR FORECAST =================
+
+const hourlyResponse = await fetch("/weather/hourly", {
+
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+        lat: position.coords.latitude,
+        lon: position.coords.longitude
+    })
+
+});
+
+const hourlyData = await hourlyResponse.json();
+
+const hourlyDiv = document.getElementById("hourlyForecast");
+
+hourlyDiv.innerHTML = "";
+
+if (hourlyData.success) {
+
+    hourlyData.hourly.forEach((hour, index) => {
+
+        let label = hour.time;
+
+        if (index === 0) {
+            label = "Now";
+        }
+
+        hourlyDiv.innerHTML += `
+
+        <div class="hour-card">
+
+            <h4>${label}</h4>
+
+            <img src="https://openweathermap.org/img/wn/${hour.icon}@2x.png">
+
+            <h2>${hour.temp}°C</h2>
+
+        </div>
+
+        `;
+
+    });
+
+}    
+});    
+</script>
+</body>
+
+</html>

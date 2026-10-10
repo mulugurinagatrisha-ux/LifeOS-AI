@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Task | LifeOS AI</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",Arial,sans-serif;
+}
+
+body{
+    background:#eef3ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+
+    width:100%;
+    max-width:760px;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:35px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+    animation:fade .5s ease;
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.header h1{
+
+    color:#2563eb;
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.header p{
+
+    color:#64748b;
+
+}
+
+.form-group{
+
+    margin-bottom:22px;
+
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#1e293b;
+
+}
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:14px;
+
+    border:2px solid #dbeafe;
+
+    border-radius:12px;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 15px rgba(37,99,235,.20);
+
+}
+
+.button-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+.btn{
+
+    padding:13px 28px;
+
+    border:none;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.update{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.update:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 20px rgba(37,99,235,.25);
+
+}
+
+.cancel{
+
+    background:#e5e7eb;
+
+    color:#111827;
+
+}
+
+.cancel:hover{
+
+    background:#cbd5e1;
+
+    transform:translateY(-3px);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h1>✅ Edit Task</h1>
+
+<p>Update your task details and save the changes.</p>
+
+</div>
+
+<form method="POST">
+
+{{ form.hidden_tag() }}
+
+<div class="form-group">
+
+{{ form.title.label }}
+
+{{ form.title() }}
+
+</div>
+
+<div class="form-group">
+
+{{ form.description.label }}
+
+{{ form.description(rows=6) }}
+
+</div>
+
+<div class="form-group">
+
+{{ form.priority.label }}
+
+{{ form.priority() }}
+
+</div>
+
+<div class="form-group">
+
+{{ form.due_date.label }}
+
+{{ form.due_date() }}
+
+</div>
+
+<div class="button-group">
+
+{{ form.submit(class="btn update", value="💾 Update Task") }}
+
+<a href="{{ url_for('tasks.all_tasks') }}" class="btn cancel">
+⬅ Back
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

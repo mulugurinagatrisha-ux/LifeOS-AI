@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Expense Tracker
+
+{% endblock %}
+
+{% block content %}
+
+<div class="expense-container">
+
+    <div class="expense-header">
+
+        <h1>💰 Expense Tracker</h1>
+
+        <p>Track your daily expenses easily</p>
+
+    </div>
+
+    <div class="top-cards">
+
+        <div class="top-card">
+
+            <h3>Total Expenses</h3>
+
+            <h1>₹ {{ total_amount or 0 }}</h1>
+
+        </div>
+
+        <div class="top-card">
+
+            <h3>This Month</h3>
+
+            <h1>₹ {{ month_amount or 0 }}</h1>
+
+        </div>
+
+        <div class="top-card">
+
+            <h3>Total Records</h3>
+
+            <h1>{{ total_expenses or 0 }}</h1>
+
+        </div>
+
+    </div>
+
+    <div class="expense-box">
+
+        <h2>Add New Expense</h2>
+
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+
+            <div class="grid">
+
+                <div>
+
+                    {{ form.title.label }}
+
+                    {{ form.title(class="form-control") }}
+
+                </div>
+
+                <div>
+
+                    {{ form.amount.label }}
+
+                    {{ form.amount(class="form-control") }}
+
+                </div>
+
+                <div>
+
+                    {{ form.category.label }}
+
+                    {{ form.category(class="form-control") }}
+
+                </div>
+
+                <div>
+
+                    {{ form.description.label }}
+
+                    {{ form.description(class="form-control",rows="3") }}
+
+                </div>
+
+            </div>
+
+            <br>
+
+            {{ form.submit(class="save-btn") }}
+
+        </form>
+
+    </div>
+
+    <br>
+
+    <div class="expense-box">
+
+        <h2>Expense History</h2>
+
+        <br>
+
+        {% if expenses %}
+
+            <table class="expense-table">
+
+                <tr>
+
+                    <th>Title</th>
+
+                    <th>Category</th>
+
+                    <th>Amount</th>
+
+                    <th>Date</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+                {% for expense in expenses %}
+
+                <tr>
+
+                    <td>{{ expense.title }}</td>
+
+                    <td>{{ expense.category }}</td>
+
+                    <td>₹ {{ expense.amount }}</td>
+
+                    <td>{{ expense.created_at.strftime('%d-%m-%Y') }}</td>
+
+                    <td class=action-buttons>
+
+                        <a href="#">✏ Edit</a>
+
+                        <a href="#">🗑 Delete</a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        {% else %}
+
+            <h3>No Expenses Found</h3>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

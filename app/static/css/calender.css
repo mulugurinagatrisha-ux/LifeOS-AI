@@ -1,0 +1,115 @@
+body{
+
+    margin:0;
+
+    background:#eef3fb;
+
+    font-family:Poppins,sans-serif;
+
+}
+
+.page{
+
+    width:95%;
+
+    margin:30px auto;
+
+}
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.content{
+
+    display:grid;
+
+    grid-template-columns:370px 1fr;
+
+    gap:25px;
+
+}
+
+.sidebar{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    height:90vh;
+
+    overflow:auto;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.calendar-panel{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+#calendar{
+
+    min-height:850px;
+
+}
+
+.event-card{
+
+    border-left:5px solid #2563eb;
+
+    margin-bottom:15px;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    background:#f8fbff;
+
+}
+
+.btn-primary{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+}
+
+.btn-dark{
+
+    background:#111827;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+}

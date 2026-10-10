@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:linear-gradient(135deg,#eef2ff,#dbeafe);
+}
+
+.profile-page{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+}
+
+.profile-card{
+
+    width:700px;
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+}
+
+.profile-top{
+
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+
+    height:170px;
+
+    position:relative;
+
+}
+
+.profile-img{
+
+    width:160px;
+    height:160px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:6px solid white;
+
+    position:absolute;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    bottom:-80px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+}
+
+.profile-body{
+
+    padding:100px 40px 40px;
+
+    text-align:center;
+
+}
+
+.profile-body h2{
+
+    margin-bottom:8px;
+
+    color:#1f2937;
+
+}
+
+.profile-body p{
+
+    color:#6b7280;
+
+    margin-bottom:30px;
+
+}
+
+.info-box{
+
+    background:#f8fafc;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    text-align:left;
+
+}
+
+.info-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px 5px;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+.info-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.info-title{
+
+    font-weight:bold;
+
+    color:#374151;
+
+}
+
+.info-value{
+
+    color:#555;
+
+}
+
+.btn-area{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:35px;
+
+}
+
+.btn-dashboard{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:12px 28px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.btn-dashboard:hover{
+
+    background:#1d4ed8;
+
+}
+
+.btn-password{
+
+    background:#f59e0b;
+
+    color:white;
+
+    padding:12px 28px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.btn-password:hover{
+
+    background:#d97706;
+
+}
+
+</style>
+
+<div class="profile-page">
+
+<div class="profile-card">
+
+<div class="profile-top">
+
+<img
+class="profile-img"
+src="{{ url_for('static',
+filename='uploads/profiles/' + user.profile_image) }}">
+
+</div>
+
+<div class="profile-body">
+
+<h2>{{ user.full_name }}</h2>
+
+<p>{{ user.email }}</p>
+
+<div class="info-box">
+
+<div class="info-item">
+
+<span class="info-title">
+📱 Phone
+</span>
+
+<span class="info-value">
+{{ user.phone or "-" }}
+</span>
+
+</div>
+
+<div class="info-item">
+
+<span class="info-title">
+👤 Gender
+</span>
+
+<span class="info-value">
+{{ user.gender or "-" }}
+</span>
+
+</div>
+
+<div class="info-item">
+
+<span class="info-title">
+📝 Bio
+</span>
+
+<span class="info-value">
+{{ user.bio or "-" }}
+</span>
+
+</div>
+
+</div>
+
+
+<div class="btn-area">
+
+ <a
+    href="{{ url_for('profile.edit_profile') }}"
+    class="btn-dashboard">
+
+        ✏ Edit Profile
+
+    </a>
+
+<a
+href="{{ url_for('dashboard.home') }}"
+class="btn-dashboard">
+
+🏠 Dashboard
+
+</a>
+
+<a
+href="{{ url_for('profile.change_password') }}"
+class="btn-password">
+
+🔒 Change Password
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

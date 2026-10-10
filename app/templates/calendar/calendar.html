@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Calendar | LifeOS AI</title>
+<style>
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:950px;
+    margin:auto;
+}
+
+.top-btn{
+    display:inline-block;
+    padding:10px 18px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    margin-right:10px;
+    font-weight:bold;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-top:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.section-title{
+    margin-top:35px;
+    margin-bottom:10px;
+    color:#1f2937;
+}
+
+.event-card{
+    background:white;
+    padding:20px;
+    margin-top:18px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    border-left:6px solid #2563eb;
+}
+
+.today{
+    border-left:6px solid #16a34a;
+}
+
+.upcoming{
+    border-left:6px solid #3b82f6;
+}
+
+.event-title{
+    font-size:22px;
+    font-weight:bold;
+    color:#111827;
+    margin-bottom:10px;
+}
+
+.info{
+    margin:6px 0;
+    color:#444;
+}
+
+.btn{
+    display:inline-block;
+    padding:8px 14px;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    margin-right:8px;
+    margin-top:10px;
+}
+
+.edit{
+    background:#f59e0b;
+}
+
+.delete{
+    background:#dc2626;
+}
+
+.empty{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    color:#666;
+    margin-top:15px;
+    text-align:center;
+}
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📅 My Calendar</h1>
+
+<a class="top-btn"
+href="{{ url_for('calendar.add_event') }}">
+➕ Add Event
+</a>
+
+<a class="top-btn"
+href="{{ url_for('dashboard.home') }}">
+🏠 Dashboard
+</a>
+
+
+<h2 class="section-title">
+🌞 Today's Events
+</h2>
+
+{% if today_events %}
+
+    {% for event in today_events %}
+
+    <div class="event-card today">
+
+        <div class="event-title">
+            {{ event.title }}
+        </div>
+
+        <p class="info">
+            🕒 <b>Time:</b>
+            {{ event.event_time }}
+        </p>
+
+        <p class="info">
+            📝 {{ event.description }}
+        </p>
+
+        <a class="btn edit"
+        href="{{ url_for('calendar.edit_event', event_id=event.id) }}">
+        ✏ Edit
+        </a>
+
+        <a class="btn delete"
+        href="{{ url_for('calendar.delete_event', event_id=event.id) }}"
+        onclick="return confirm('Delete this event?')">
+        🗑 Delete
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty">
+No Events Today
+</div>
+
+{% endif %}
+
+
+
+<h2 class="section-title">
+📅 Upcoming Events
+</h2>
+
+{% if upcoming_events %}
+
+    {% for event in upcoming_events %}
+
+    <div class="event-card upcoming">
+
+        <div class="event-title">
+            {{ event.title }}
+        </div>
+
+        <p class="info">
+            📆 <b>Date:</b>
+            {{ event.event_date }}
+        </p>
+
+        <p class="info">
+            🕒 <b>Time:</b>
+            {{ event.event_time }}
+        </p>
+
+        <p class="info">
+            📝 {{ event.description }}
+        </p>
+
+        <a class="btn edit"
+        href="{{ url_for('calendar.edit_event', event_id=event.id) }}">
+        ✏ Edit
+        </a>
+
+        <a class="btn delete"
+        href="{{ url_for('calendar.delete_event', event_id=event.id) }}"
+        onclick="return confirm('Delete this event?')">
+        🗑 Delete
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty">
+No Upcoming Events
+</div>
+
+{% endif %}
+
+
+
+<h2 class="section-title">
+📚 All Events
+</h2>
+
+{% if events %}
+
+    {% for event in events %}
+
+    <div class="event-card">
+
+        <div class="event-title">
+            {{ event.title }}
+        </div>
+
+        <p class="info">
+            📅 <b>Date:</b>
+            {{ event.event_date }}
+        </p>
+
+        <p class="info">
+            🕒 <b>Time:</b>
+            {{ event.event_time }}
+        </p>
+
+        <p class="info">
+            📝 {{ event.description }}
+        </p>
+
+        <a class="btn edit"
+        href="{{ url_for('calendar.edit_event', event_id=event.id) }}">
+        ✏ Edit
+        </a>
+
+        <a class="btn delete"
+        href="{{ url_for('calendar.delete_event', event_id=event.id) }}"
+        onclick="return confirm('Delete this event?')">
+        🗑 Delete
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty">
+No Events Added Yet
+</div>
+
+{% endif %}
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+
+    const calendarEl=document.getElementById("calendar");
+
+    const calendar=new FullCalendar.Calendar(calendarEl,{
+
+        initialView:"dayGridMonth",
+
+        height:850,
+
+        editable:true,
+
+        selectable:true,
+
+        dayMaxEvents:true,
+
+        headerToolbar:{
+
+            left:"prev,next today",
+
+            center:"title",
+
+            right:"dayGridMonth,timeGridWeek,timeGridDay,listWeek"
+
+        },
+
+        events:eventList
+
+    });
+
+    calendar.render();
+
+});
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+</body>
+
+</html>
