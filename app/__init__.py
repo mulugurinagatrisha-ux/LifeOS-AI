@@ -51,5 +51,6 @@ def create_app():
     url_prefix="/ai_goals"
 )
     
-    
+    with app.app_context():
+        db.create_all()
     return app
