@@ -25,13 +25,13 @@ class AIGoal(db.Model):
     )
 
     current_value = db.Column(
-        db.Integer,
-        default=0
+        db.String(100),
+        default=""
     )
 
     target_value = db.Column(
-        db.Integer,
-        default=0
+        db.String(100),
+        default=""
     )
 
     estimated_days = db.Column(
